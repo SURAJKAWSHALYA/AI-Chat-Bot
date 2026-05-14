@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="chat-wrapper">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <img class="bot-icon" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+        <div>
+            <h3>AI Assistant</h3>
+            <p>Online • Ready to help</p>
+        </div>
+    </div>
+
+    <!-- CHAT AREA -->
+    <div id="chatbox" class="chat-box"></div>
+
+    <!-- INPUT AREA -->
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type your message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+function sendMessage() {
+    let input = document.getElementById("userInput");
+    let message = input.value.trim();
+    let chatbox = document.getElementById("chatbox");
+
+    if (message === "") return;
+
+    // USER MESSAGE
+    chatbox.innerHTML += `
+        <div class="msg user">
+            <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png">
+            <div class="bubble">${message}</div>
+        </div>
+    `;
+
+    input.value = "";
+
+    // LOADING BOT
+    let loadingId = "load-" + Date.now();
+    chatbox.innerHTML += `
+        <div class="msg bot" id="${loadingId}">
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+            <div class="bubble">Typing...</div>
+        </div>
+    `;
+
+    chatbox.scrollTop = chatbox.scrollHeight;
+
+    fetch("/get", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: message})
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        document.getElementById(loadingId).remove();
+
+        chatbox.innerHTML += `
+            <div class="msg bot">
+                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+                <div class="bubble">${data.response}</div>
+            </div>
+        `;
+
+        chatbox.scrollTop = chatbox.scrollHeight;
+    });
+}
+</script>
+
+</body>
+</html>
