@@ -1,84 +1,395 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AI Chatbot</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Modern AI Chatbot</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:
+            linear-gradient(135deg,#0f172a,#1e293b,#111827);
+            overflow:hidden;
+        }
+
+        .chat-container{
+            width:420px;
+            height:90vh;
+            background:rgba(255,255,255,0.08);
+            border:1px solid rgba(255,255,255,0.1);
+            backdrop-filter:blur(20px);
+            border-radius:25px;
+            overflow:hidden;
+            display:flex;
+            flex-direction:column;
+            box-shadow:0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        /* HEADER */
+
+        .header{
+            padding:18px;
+            background:rgba(255,255,255,0.05);
+            border-bottom:1px solid rgba(255,255,255,0.08);
+
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+        }
+
+        .header-left{
+            display:flex;
+            align-items:center;
+            gap:12px;
+        }
+
+        .bot-logo{
+            width:52px;
+            height:52px;
+            border-radius:50%;
+            border:2px solid #38bdf8;
+        }
+
+        .header h2{
+            color:white;
+            font-size:18px;
+            font-weight:600;
+        }
+
+        .status{
+            color:#4ade80;
+            font-size:13px;
+        }
+
+        /* CHAT AREA */
+
+        .chat-box{
+            flex:1;
+            padding:20px;
+            overflow-y:auto;
+            scroll-behavior:smooth;
+        }
+
+        .chat-box::-webkit-scrollbar{
+            width:5px;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb{
+            background:#334155;
+            border-radius:10px;
+        }
+
+        .message{
+            display:flex;
+            margin-bottom:18px;
+            align-items:flex-end;
+            animation:fadeIn 0.3s ease;
+        }
+
+        .message img{
+            width:38px;
+            height:38px;
+            border-radius:50%;
+        }
+
+        .message.user{
+            justify-content:flex-end;
+        }
+
+        .message.user img{
+            margin-left:10px;
+        }
+
+        .message.bot img{
+            margin-right:10px;
+        }
+
+        .bubble{
+            max-width:75%;
+            padding:14px 18px;
+            border-radius:18px;
+            font-size:14px;
+            line-height:1.5;
+            word-wrap:break-word;
+        }
+
+        .user .bubble{
+            background:linear-gradient(135deg,#2563eb,#38bdf8);
+            color:white;
+            border-bottom-right-radius:5px;
+        }
+
+        .bot .bubble{
+            background:rgba(255,255,255,0.08);
+            color:white;
+            border-bottom-left-radius:5px;
+            border:1px solid rgba(255,255,255,0.08);
+        }
+
+        /* INPUT AREA */
+
+        .input-area{
+            padding:18px;
+            display:flex;
+            gap:10px;
+            background:rgba(255,255,255,0.04);
+            border-top:1px solid rgba(255,255,255,0.08);
+        }
+
+        .input-area input{
+            flex:1;
+            padding:14px 18px;
+            border:none;
+            outline:none;
+            border-radius:15px;
+            background:rgba(255,255,255,0.08);
+            color:white;
+            font-size:14px;
+        }
+
+        .input-area input::placeholder{
+            color:#cbd5e1;
+        }
+
+        .input-area button{
+            width:55px;
+            border:none;
+            border-radius:15px;
+            cursor:pointer;
+            font-size:20px;
+            color:white;
+            background:linear-gradient(135deg,#2563eb,#38bdf8);
+            transition:0.3s;
+        }
+
+        .input-area button:hover{
+            transform:scale(1.05);
+        }
+
+        /* ANIMATION */
+
+        @keyframes fadeIn{
+            from{
+                opacity:0;
+                transform:translateY(10px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        /* MOBILE */
+
+        @media(max-width:500px){
+
+            .chat-container{
+                width:100%;
+                height:100vh;
+                border-radius:0;
+            }
+
+        }
+
+    </style>
 </head>
 
 <body>
 
-<div class="chat-wrapper">
+<div class="chat-container">
 
-    <!-- TOP BAR -->
-    <div class="top-bar">
-        <img class="bot-icon" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
-        <div>
-            <h3>AI Assistant</h3>
-            <p>Online • Ready to help</p>
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <img 
+            class="bot-logo"
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+            <div>
+                <h2>AI Assistant</h2>
+                <div class="status">● Online</div>
+            </div>
+
         </div>
+
     </div>
 
     <!-- CHAT AREA -->
-    <div id="chatbox" class="chat-box"></div>
 
-    <!-- INPUT AREA -->
+    <div class="chat-box" id="chatbox">
+
+        <div class="message bot">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+            <div class="bubble">
+                Hello 👋 <br>
+                I'm your AI assistant. Ask me anything.
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- INPUT -->
+
     <div class="input-area">
-        <input type="text" id="userInput" placeholder="Type your message..." />
-        <button onclick="sendMessage()">Send</button>
+
+        <input
+        type="text"
+        id="userInput"
+        placeholder="Type your message..."
+        autocomplete="off">
+
+        <button onclick="sendMessage()">➤</button>
+
     </div>
 
 </div>
 
 <script>
-function sendMessage() {
+
+const inputField = document.getElementById("userInput");
+
+inputField.addEventListener("keydown", function(event){
+
+    if(event.key === "Enter"){
+
+        event.preventDefault();
+
+        sendMessage();
+    }
+
+});
+
+function sendMessage(){
+
     let input = document.getElementById("userInput");
+
     let message = input.value.trim();
+
     let chatbox = document.getElementById("chatbox");
 
-    if (message === "") return;
+    if(message === "") return;
 
     // USER MESSAGE
+
     chatbox.innerHTML += `
-        <div class="msg user">
-            <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png">
-            <div class="bubble">${message}</div>
-        </div>
+    
+    <div class="message user">
+
+        <div class="bubble">${message}</div>
+
+        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png">
+
+    </div>
+
     `;
 
     input.value = "";
 
-    // LOADING BOT
-    let loadingId = "load-" + Date.now();
+    chatbox.scrollTop = chatbox.scrollHeight;
+
+    // TYPING
+
+    let loadingId = "loading-" + Date.now();
+
     chatbox.innerHTML += `
-        <div class="msg bot" id="${loadingId}">
-            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
-            <div class="bubble">Typing...</div>
+
+    <div class="message bot" id="${loadingId}">
+
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+        <div class="bubble">
+            Typing...
         </div>
+
+    </div>
+
     `;
 
     chatbox.scrollTop = chatbox.scrollHeight;
 
-    fetch("/get", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({message: message})
+    // API CALL
+
+    fetch("/get",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            message:message
+        })
+
     })
+
     .then(res => res.json())
+
     .then(data => {
 
         document.getElementById(loadingId).remove();
 
         chatbox.innerHTML += `
-            <div class="msg bot">
-                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
-                <div class="bubble">${data.response}</div>
+
+        <div class="message bot">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+            <div class="bubble">
+                ${data.response}
             </div>
+
+        </div>
+
         `;
 
         chatbox.scrollTop = chatbox.scrollHeight;
+
+    })
+
+    .catch(error => {
+
+        document.getElementById(loadingId).remove();
+
+        chatbox.innerHTML += `
+
+        <div class="message bot">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+            <div class="bubble">
+                Server Error ❌
+            </div>
+
+        </div>
+
+        `;
+
     });
+
 }
+
 </script>
 
 </body>
