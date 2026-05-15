@@ -137,3 +137,92 @@ body {
     background: #374151;
     border-radius: 10px;
 }
+
+
+/* ===== GOOGLE FONT ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+/* ===== CONTAINER ===== */
+.auth-box{
+    width:380px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(12px);
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.3);
+    text-align:center;
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+/* ===== TITLE ===== */
+.auth-box h2{
+    color:white;
+    margin-bottom:25px;
+    font-size:28px;
+    font-weight:600;
+}
+
+/* ===== INPUTS ===== */
+.auth-box input{
+    width:100%;
+    padding:14px;
+    margin:12px 0;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:rgba(255,255,255,0.12);
+    color:white;
+    font-size:15px;
+}
+
+.auth-box input::placeholder{
+    color:#cbd5e1;
+}
+
+/* ===== BUTTON ===== */
+.auth-box button{
+    width:100%;
+    padding:14px;
+    margin-top:18px;
+    border:none;
+    border-radius:12px;
+    background:#38bdf8;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.auth-box button:hover{
+    background:#0ea5e9;
+    transform:scale(1.02);
+}
+
+/* ===== LINKS ===== */
+.auth-box a{
+    display:block;
+    margin-top:18px;
+    color:#93c5fd;
+    text-decoration:none;
+    font-size:14px;
+}
+
+.auth-box a:hover{
+    text-decoration:underline;
+}
