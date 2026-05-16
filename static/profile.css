@@ -1,0 +1,85 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#0f172a;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.profile-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    width:350px;
+    background:#1e293b;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+
+.profile-img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #38bdf8;
+    margin-bottom:20px;
+}
+
+.card h1{
+    color:white;
+    margin-bottom:10px;
+}
+
+.email{
+    color:#94a3b8;
+    margin-bottom:25px;
+}
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:30px;
+}
+
+.box{
+    background:#334155;
+    padding:15px;
+    border-radius:12px;
+    width:45%;
+}
+
+.box h3{
+    color:#38bdf8;
+    margin-bottom:8px;
+}
+
+.box p{
+    color:white;
+}
+
+.logout-btn{
+    display:block;
+    background:#ef4444;
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    border-radius:10px;
+    transition:0.3s;
+}
+
+.logout-btn:hover{
+    background:#dc2626;
+}

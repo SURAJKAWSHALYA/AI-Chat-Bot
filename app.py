@@ -213,3 +213,69 @@ def voice():
 # =========================
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    from flask import Flask, render_template, session, redirect, url_for
+
+app = Flask(__name__)
+app.secret_key = "secretkey"
+
+# DEMO USER DATA
+users = {
+    "suraj": {
+        "name": "Suraj",
+        "email": "suraj@gmail.com",
+        "joined": "2026-05-16",
+        "image": "https://i.imgur.com/6VBx3io.png"
+    }
+}
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+# LOGIN DEMO
+@app.route("/login")
+def login():
+    session["user"] = "suraj"
+    return redirect(url_for("profile"))
+
+# PROFILE PAGE
+@app.route("/profile")
+def profile():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    user = users.get(session["user"])
+
+    return render_template("profile.html", user=user)
+
+# LOGOUT
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
+if __name__ == "__main__":
+    app.run(debug=True)
