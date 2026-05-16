@@ -3,6 +3,7 @@
 <head>
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Profile</title>
 
@@ -11,19 +12,47 @@
 </head>
 <body>
 
-<div class="card">
+<div class="profile-container">
 
-    <img src="https://i.imgur.com/6VBx3io.png" class="profile-img">
+    <div class="card">
 
-    <h1>{{ username }}</h1>
+        <img 
+        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+        class="profile-img">
 
-    <p>{{ email }}</p>
+        <h1>{{ username }}</h1>
 
-    <div class="box">
-        Joined : {{ joined }}
+        <p class="email">
+            {{ username }}@gmail.com
+        </p>
+
+        <div class="info">
+
+            <div class="box">
+                <h3>Status</h3>
+                <p>Online</p>
+            </div>
+
+            <div class="box">
+                <h3>AI Plan</h3>
+                <p>Free</p>
+            </div>
+
+        </div>
+
+        <div class="buttons">
+
+            <a href="/chatbot" class="chat-btn">
+                Chat
+            </a>
+
+            <a href="/logout" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
     </div>
-
-    <a href="/logout" class="logout-btn">Logout</a>
 
 </div>
 

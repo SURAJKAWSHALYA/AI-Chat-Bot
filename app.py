@@ -1,11 +1,14 @@
-from flask import Flask, render_template, request, jsonify, send_file, redirect, session
+from flask import Flask, render_template, request, jsonify, send_file, redirect, session, url_for
 from dotenv import load_dotenv
+
 import requests
 import os
 import uuid
 import sqlite3
 
-
+# =========================
+# APP CONFIG
+# =========================
 load_dotenv()
 
 app = Flask(__name__)
@@ -21,9 +24,10 @@ headers = {
 }
 
 # =========================
-# DATABASE INIT
+# DATABASE
 # =========================
 def init_db():
+
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
 
@@ -40,59 +44,58 @@ def init_db():
 
 init_db()
 
-
 # =========================
 # AI RESPONSE
 # =========================
 def get_ai_response(message):
+
     try:
+
         payload = {
             "model": "llama-3.1-8b-instant",
             "messages": [
                 {
                     "role": "system",
                     "content": (
-                        "You are a Sri Lankan Gen-Z friendly AI. "
-                        "Speak casual Sinhala like WhatsApp chat. "
-                        "Be short, natural, friendly."
+                        "You are a friendly Sri Lankan Sinhala AI assistant. "
+                        "Talk naturally like Gen-Z chat."
                     )
                 },
-                {"role": "user", "content": message}
+                {
+                    "role": "user",
+                    "content": message
+                }
             ],
-            "temperature": 0.3,
-            "max_tokens": 512
+            "temperature": 0.5,
+            "max_tokens": 300
         }
 
-        response = requests.post(API_URL, json=payload, headers=headers)
+        response = requests.post(
+            API_URL,
+            json=payload,
+            headers=headers
+        )
 
         if response.status_code != 200:
             return f"API Error: {response.text}"
 
         data = response.json()
+
         return data["choices"][0]["message"]["content"]
 
     except Exception as e:
         return f"Error: {str(e)}"
 
-
 # =========================
-# HOME (redirect login)
+# HOME
 # =========================
 @app.route("/")
 def home():
+
+    if "user" in session:
+        return redirect("/chatbot")
+
     return redirect("/login")
-
-
-# =========================
-# CHATBOT PAGE
-# =========================
-@app.route("/chatbot")
-def chatbot():
-    if "user" not in session:
-        return redirect("/login")
-
-    return render_template("index.html", username=session["user"])
-
 
 # =========================
 # REGISTER
@@ -106,6 +109,7 @@ def register():
         password = request.form["password"]
 
         try:
+
             conn = sqlite3.connect("users.db")
             cursor = conn.cursor()
 
@@ -123,7 +127,6 @@ def register():
             return "Username already exists"
 
     return render_template("register.html")
-
 
 # =========================
 # LOGIN
@@ -145,25 +148,56 @@ def login():
         )
 
         user = cursor.fetchone()
+
         conn.close()
 
         if user:
+
             session["user"] = username
+
             return redirect("/chatbot")
 
-        return "Invalid Username or Password"
+        return "Invalid username or password"
 
     return render_template("login.html")
 
+# =========================
+# CHATBOT PAGE
+# =========================
+@app.route("/chatbot")
+def chatbot():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    return render_template(
+        "index.html",
+        username=session["user"]
+    )
+
+# =========================
+# PROFILE PAGE
+# =========================
+@app.route("/profile")
+def profile():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    return render_template(
+        "profile.html",
+        username=session["user"]
+    )
 
 # =========================
 # LOGOUT
 # =========================
 @app.route("/logout")
 def logout():
-    session.clear()
-    return redirect("/login")
 
+    session.clear()
+
+    return redirect("/login")
 
 # =========================
 # CHAT API
@@ -172,17 +206,22 @@ def logout():
 def chat():
 
     if "user" not in session:
-        return jsonify({"response": "Please login first"})
+        return jsonify({
+            "response": "Please login first"
+        })
 
     user_message = request.json.get("message")
 
     if not user_message:
-        return jsonify({"response": "No message received"})
+        return jsonify({
+            "response": "No message received"
+        })
 
     bot_reply = get_ai_response(user_message)
 
-    return jsonify({"response": bot_reply})
-
+    return jsonify({
+        "response": bot_reply
+    })
 
 # =========================
 # VOICE API
@@ -191,96 +230,32 @@ def chat():
 def voice():
 
     if "user" not in session:
-        return jsonify({"error": "Please login first"})
+        return jsonify({
+            "error": "Please login first"
+        })
 
     user_message = request.json.get("message")
 
     if not user_message:
-        return jsonify({"error": "No message"})
+        return jsonify({
+            "error": "No message"
+        })
 
     bot_reply = get_ai_response(user_message)
 
     filename = f"voice_{uuid.uuid4().hex}.mp3"
 
     tts = gTTS(text=bot_reply, lang="en")
+
     tts.save(filename)
 
-    return send_file(filename, mimetype="audio/mpeg")
-
+    return send_file(
+        filename,
+        mimetype="audio/mpeg"
+    )
 
 # =========================
 # RUN APP
 # =========================
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from flask import Flask, render_template, session, redirect, url_for
-
-app = Flask(__name__)
-
-app.secret_key = "mysecretkey"
-
-
-# HOME PAGE
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-
-# LOGIN DEMO
-@app.route("/login")
-def login():
-
-    session["username"] = "Suraj"
-    session["email"] = "suraj@gmail.com"
-    session["joined"] = "2026"
-
-    return redirect(url_for("profile"))
-
-
-# PROFILE PAGE
-@app.route("/profile")
-def profile():
-
-    if "username" not in session:
-        return redirect(url_for("login"))
-
-    return render_template(
-        "profile.html",
-        username=session["username"],
-        email=session["email"],
-        joined=session["joined"]
-    )
-
-
-# LOGOUT
-@app.route("/logout")
-def logout():
-
-    session.clear()
-
-    return redirect(url_for("home"))
-
-
 if __name__ == "__main__":
     app.run(debug=True)
