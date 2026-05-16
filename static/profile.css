@@ -83,3 +83,55 @@ body{
 .logout-btn:hover{
     background:#dc2626;
 }
+
+
+body{
+    background:#0f172a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+    font-family:Arial;
+}
+
+.card{
+    background:#1e293b;
+    padding:30px;
+    width:320px;
+    text-align:center;
+    border-radius:20px;
+}
+
+.profile-img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:4px solid #38bdf8;
+}
+
+h1{
+    color:white;
+}
+
+p{
+    color:#94a3b8;
+}
+
+.box{
+    background:#334155;
+    color:white;
+    padding:15px;
+    margin-top:20px;
+    border-radius:10px;
+}
+
+.logout-btn{
+    display:block;
+    margin-top:25px;
+    background:red;
+    color:white;
+    text-decoration:none;
+    padding:12px;
+    border-radius:10px;
+}

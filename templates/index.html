@@ -417,17 +417,82 @@ function sendMessage(){
 
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body style="background:black;color:white;text-align:center;padding-top:100px;">
+<body>
 
-    <h1>AI Chatbot</h1>
+<div class="main-container">
 
-    <a href="/login">
-        <button style="padding:15px 30px;">Login</button>
-    </a>
+    <!-- LEFT SIDE -->
+    <div class="left-side">
+
+        <h1>AI Chatbot</h1>
+
+        <p>
+            Your smart AI assistant with voice support,
+            Sinhala chat, and real-time messaging.
+        </p>
+
+        <div class="buttons">
+            <a href="/login" class="login-btn">Login</a>
+            <a href="/profile" class="profile-btn">Profile</a>
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE CHAT -->
+    <div class="chat-container">
+
+        <!-- TOP -->
+        <div class="top-bar">
+
+            <div class="bot-info">
+
+                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+
+                <div>
+                    <h2>AI Assistant</h2>
+                    <span>● Online</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CHAT AREA -->
+        <div class="chat-box">
+
+            <div class="bot-message">
+
+                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+
+                <div class="message">
+                    Hello 👋 <br>
+                    I'm your AI assistant. Ask me anything.
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- INPUT -->
+        <div class="input-area">
+
+            <input type="text" placeholder="Type your message...">
+
+            <button>➤</button>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>
