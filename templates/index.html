@@ -22,53 +22,82 @@
 
         <div>
 
+            <!-- LOGO -->
             <div class="logo">
                 <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
                 <div>
                     <h2>AI Assistant</h2>
                     <p class="online">● Online</p>
                 </div>
             </div>
 
+            <!-- MENU -->
             <div class="menu">
-                <a href="/chatbot" class="active">💬 Chat</a>
-                <a href="/profile">👤 Profile</a>
-                <a href="#">⚙ Settings</a>
-                <a href="#">🕘 History</a>
-                <a href="/logout">🚪 Logout</a>
+
+                <a href="/chatbot" class="active">
+                    💬 Chat
+                </a>
+
+                <a href="/profile">
+                    👤 Profile
+                </a>
+
+                <a href="/settings">
+                    ⚙ Settings
+                </a>
+
+                <a href="/history">
+                    🕘 History
+                </a>
+
+                <a href="/logout">
+                    🚪 Logout
+                </a>
+
             </div>
 
         </div>
 
+        <!-- PROFILE -->
         <div class="profile-box">
+
             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+
             <div>
                 <h4>{{ username }}</h4>
                 <p>{{ username }}@gmail.com</p>
             </div>
+
         </div>
 
     </div>
 
-    <!-- CHAT -->
+    <!-- CHAT SECTION -->
     <div class="chat-section">
 
+        <!-- TOP BAR -->
         <div class="chat-top">
+
             <div class="top-profile">
                 <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
                 <span>{{ username }}</span>
             </div>
+
         </div>
 
         <!-- CHAT BOX -->
         <div class="chat-box" id="chatbox">
 
             <div class="message-row bot">
-                <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+                <img class="avatar"
+                src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
 
                 <div class="message bot">
                     Hello 👋 I'm your AI Assistant. Ask me anything.
                 </div>
+
             </div>
 
         </div>
@@ -76,9 +105,16 @@
         <!-- INPUT -->
         <div class="input-area">
 
-            <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Type your message..."
+                autocomplete="off"
+            >
 
-            <button onclick="sendMessage()">➤</button>
+            <button onclick="sendMessage()">
+                ➤
+            </button>
 
         </div>
 
@@ -87,17 +123,21 @@
 </div>
 
 <script>
+
 const input = document.getElementById("userInput");
 
 input.addEventListener("keydown", function(e){
+
     if(e.key === "Enter"){
         sendMessage();
     }
+
 });
 
 function sendMessage(){
 
     let message = input.value.trim();
+
     if(message === "") return;
 
     let chatbox = document.getElementById("chatbox");
@@ -105,60 +145,105 @@ function sendMessage(){
     // USER MESSAGE
     chatbox.innerHTML += `
     <div class="message-row user">
+
         <div class="message user">
             ${message}
         </div>
-        <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/847/847969.png">
+
+        <img class="avatar"
+        src="https://cdn-icons-png.flaticon.com/512/847/847969.png">
+
     </div>`;
 
+    // SAVE HISTORY
+    fetch("/save_chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: message
+        })
+    });
+
     input.value = "";
+
     chatbox.scrollTop = chatbox.scrollHeight;
 
-    // TYPING
+    // LOADING
     let loadingId = "load-" + Date.now();
 
     chatbox.innerHTML += `
     <div class="message-row bot" id="${loadingId}">
-        <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
-        <div class="message bot">Typing...</div>
+
+        <img class="avatar"
+        src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+        <div class="message bot">
+            Typing...
+        </div>
+
     </div>`;
 
     chatbox.scrollTop = chatbox.scrollHeight;
 
     // API CALL
     fetch("/get", {
+
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({message: message})
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            message: message
+        })
+
     })
+
     .then(res => res.json())
+
     .then(data => {
 
         document.getElementById(loadingId).remove();
 
         chatbox.innerHTML += `
         <div class="message-row bot">
-            <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+            <img class="avatar"
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
             <div class="message bot">
                 ${data.response}
             </div>
+
         </div>`;
 
         chatbox.scrollTop = chatbox.scrollHeight;
 
     })
+
     .catch(() => {
 
         document.getElementById(loadingId).remove();
 
         chatbox.innerHTML += `
         <div class="message-row bot">
-            <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
-            <div class="message bot">Server Error ❌</div>
+
+            <img class="avatar"
+            src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+            <div class="message bot">
+                Server Error ❌
+            </div>
+
         </div>`;
+
     });
 
 }
+
 </script>
 
 </body>

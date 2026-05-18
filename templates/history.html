@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="glass-bg">
+
+    <div class="glass-card">
+
+        <h1>🕘 History</h1>
+
+        <p class="sub">Your previous AI chats</p>
+
+        <div class="history-list">
+
+            {% for chat in chats %}
+
+            <div class="history-item">
+                <span class="dot"></span>
+                <p>{{ chat[2] }}</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

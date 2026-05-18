@@ -2,41 +2,38 @@
 <html>
 <head>
     <title>Settings</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
-<div class="page">
+<div class="glass-bg">
 
-    <h1>⚙ Settings</h1>
+    <div class="glass-card">
 
-    <form method="POST" class="settings-form">
+        <h1>⚙ Settings</h1>
+
+        <p class="sub">Customize your AI experience</p>
 
         <label>Theme</label>
-        <select name="theme">
-            <option>Dark</option>
-            <option>Light</option>
+        <select>
+            <option>Dark Mode</option>
+            <option>Light Mode</option>
         </select>
 
         <label>Language</label>
-        <select name="language">
-            <option>English</option>
+        <select>
             <option>Sinhala</option>
+            <option>English</option>
         </select>
 
-        <button type="submit">Save Settings</button>
+        <button class="glow-btn">Save Changes</button>
 
-    </form>
+        <a href="/chatbot" class="link">← Back to Chat</a>
 
-    <div class="saved-settings">
-        <h2>Saved Settings</h2>
-
-        {% for item in data %}
-        <div class="card">
-            <p>Theme: {{ item[2] }}</p>
-            <p>Language: {{ item[3] }}</p>
-        </div>
-        {% endfor %}
     </div>
 
 </div>
