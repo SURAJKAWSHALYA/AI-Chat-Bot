@@ -76,30 +76,23 @@ def get_ai_response(message):
                 {
                     "role": "system",
                     "content": """
-You are AI Mithura 🤖, a professional Sinhala AI assistant.
+You are AI Mithura 🤖, a smart bilingual assistant.
 
-PRIMARY LANGUAGE RULES:
-- Always respond in natural, clear Sinhala (Sri Lankan style)
-- Do NOT mix English unless the user uses English
-- Do NOT add random words, fake names, or meaningless phrases
-- Do NOT include translations like (Translation:)
-- Keep Sinhala grammar clean and natural
+LANGUAGE RULES:
+- If user writes in Sinhala → reply ONLY in Sinhala (Sri Lankan style)
+- If user writes in English → reply in SIMPLE English
+- Never mix both languages unless user mixes them
+- Do NOT add translation labels
+- Keep responses clean and natural
 
 TONE:
-- Friendly like ChatGPT
-- Helpful, calm, and intelligent
-- Short to medium length answers
+- Friendly, helpful, calm
+- Short to medium answers
 - Use emojis only when appropriate 😊
 
 BEHAVIOR RULES:
-- Never act like girlfriend/boyfriend or romantic partner
-- If user asks romantic questions → politely refuse and redirect
-- Always stay consistent and professional
-
-QUALITY RULE:
-- Think before responding
-- Give meaningful, clear answers
-- Avoid repetition and broken sentences
+- No romantic or personal relationship behavior
+- Stay professional and helpful
 """
                 },
                 {
@@ -118,10 +111,7 @@ QUALITY RULE:
 
         data = response.json()
 
-        try:
-            return data["choices"][0]["message"]["content"]
-        except:
-            return "Response parsing error"
+        return data["choices"][0]["message"]["content"]
 
     except Exception as e:
         return f"Error: {str(e)}"
@@ -175,11 +165,7 @@ def login():
         conn = sqlite3.connect("users.db")
         cursor = conn.cursor()
 
-        cursor.execute(
-            "SELECT * FROM users WHERE username=?",
-            (username,)
-        )
-
+        cursor.execute("SELECT * FROM users WHERE username=?", (username,))
         user = cursor.fetchone()
         conn.close()
 
@@ -311,7 +297,6 @@ def chat():
 
     bot_reply = get_ai_response(user_message)
 
-    # SAVE CHAT
     conn = sqlite3.connect("users.db")
     c = conn.cursor()
 

@@ -1,30 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>History</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 
 <body>
+
+<!-- BACK BUTTON -->
+<a href="/chatbot" class="back-btn">⬅ Back</a>
 
 <div class="glass-bg">
 
     <div class="glass-card">
 
-        <h1>🕘 History</h1>
+        <h1>🕘 Chat History</h1>
+        <p class="sub">All your AI conversations</p>
 
-        <p class="sub">Your previous AI chats</p>
-
-        <div class="history-list">
+        <div class="history-list" id="historyBox">
 
             {% for chat in chats %}
 
             <div class="history-item">
-                <span class="dot"></span>
-                <p>{{ chat[2] }}</p>
+                <div class="dot"></div>
+                <div class="text">{{ chat[2] }}</div>
             </div>
 
             {% endfor %}
@@ -34,6 +41,25 @@
     </div>
 
 </div>
+
+<!-- SCROLL BUTTON -->
+<button onclick="scrollTopPage()" id="scrollBtn">⬆</button>
+
+<script>
+window.onscroll = function() {
+    let btn = document.getElementById("scrollBtn");
+
+    if (document.documentElement.scrollTop > 200) {
+        btn.style.display = "block";
+    } else {
+        btn.style.display = "none";
+    }
+};
+
+function scrollTopPage() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
 
 </body>
 </html>
