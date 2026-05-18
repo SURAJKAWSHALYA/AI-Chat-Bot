@@ -259,3 +259,122 @@ def voice():
 # =========================
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#setting//
+from flask import Flask, render_template, request, redirect, session
+import sqlite3
+
+app = Flask(__name__)
+app.secret_key = "secret"
+
+# DATABASE
+def init_db():
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        theme TEXT,
+        language TEXT
+    )
+    """)
+
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        message TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+init_db()
+
+# DASHBOARD
+@app.route("/")
+def dashboard():
+    return render_template("dashboard.html")
+
+# SETTINGS PAGE
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+
+    username = "user2"
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+
+    if request.method == "POST":
+
+        theme = request.form["theme"]
+        language = request.form["language"]
+
+        c.execute("""
+        INSERT INTO settings(username, theme, language)
+        VALUES (?, ?, ?)
+        """, (username, theme, language))
+
+        conn.commit()
+
+    c.execute("SELECT * FROM settings WHERE username=?", (username,))
+    data = c.fetchall()
+
+    conn.close()
+
+    return render_template("settings.html", data=data)
+
+# HISTORY PAGE
+@app.route("/history")
+def history():
+
+    username = "user2"
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM history WHERE username=?", (username,))
+    chats = c.fetchall()
+
+    conn.close()
+
+    return render_template("history.html", chats=chats)
+
+# SAVE CHAT
+@app.route("/save_chat", methods=["POST"])
+def save_chat():
+
+    username = "user2"
+    message = request.form["message"]
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+
+    c.execute("""
+    INSERT INTO history(username, message)
+    VALUES (?, ?)
+    """, (username, message))
+
+    conn.commit()
+    conn.close()
+
+    return "Saved"
+
+if __name__ == "__main__":
+    app.run(debug=True)

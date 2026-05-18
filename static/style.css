@@ -384,3 +384,48 @@ body {
         padding: 25px;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+/* setting css*/
+
+.page{
+    padding:40px;
+    color:white;
+}
+
+.settings-form{
+    width:300px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.settings-form select,
+.settings-form button{
+    padding:12px;
+    border:none;
+    border-radius:10px;
+}
+
+.settings-form button{
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+
+.card,
+.history-card{
+    background:#111827;
+    padding:15px;
+    border-radius:12px;
+    margin-top:15px;
+}

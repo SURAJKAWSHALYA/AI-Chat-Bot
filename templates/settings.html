@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="page">
+
+    <h1>⚙ Settings</h1>
+
+    <form method="POST" class="settings-form">
+
+        <label>Theme</label>
+        <select name="theme">
+            <option>Dark</option>
+            <option>Light</option>
+        </select>
+
+        <label>Language</label>
+        <select name="language">
+            <option>English</option>
+            <option>Sinhala</option>
+        </select>
+
+        <button type="submit">Save Settings</button>
+
+    </form>
+
+    <div class="saved-settings">
+        <h2>Saved Settings</h2>
+
+        {% for item in data %}
+        <div class="card">
+            <p>Theme: {{ item[2] }}</p>
+            <p>Language: {{ item[3] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+</body>
+</html>
